@@ -1,6 +1,8 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 // TreeNode 结构体定义了一个二叉搜索树的节点，包含一个整数值 Val 和两个指向子节点的指针 Left 和 Right
 type TreeNode struct {
@@ -150,6 +152,36 @@ func (t *TreeNode) postorderTraversal() []int {
 	return result
 }
 
+// 使用迭代方法（使用栈）进行中序遍历：
+func (t *Tree) InorderTraversal2() []int {
+	if t.Root == nil {
+		return nil
+	}
+
+	result := []int{}
+	stack := []*TreeNode{}
+	curr := t.Root
+
+	for curr != nil || len(stack) > 0 {
+		// 遍历到最左边的节点，同时将节点压入栈中
+		fmt.Println(curr)
+		for curr != nil {
+			stack = append(stack, curr)
+			curr = curr.Left
+		}
+
+		// 从栈中弹出一个节点，并将其值加入结果列表
+		curr = stack[len(stack)-1]
+		stack = stack[:len(stack)-1]
+		result = append(result, curr.Val)
+
+		// 移动到右子节点
+		curr = curr.Right
+	}
+
+	return result
+}
+
 func main() {
 	bt := &Tree{}
 	bt.Insert(5)
@@ -164,6 +196,9 @@ func main() {
 
 	// 中序遍历二叉树 //迭代方式
 	fmt.Println("中序遍历：", bt.InorderTraversal())
+
+	// 使用迭代方法（使用栈）
+	fmt.Println("中序遍历使用迭代方法：", bt.InorderTraversal2())
 
 	// 后序遍历以及以下 //迭代方式
 	fmt.Println("后序遍历：", bt.PostorderTraversal())
